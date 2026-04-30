@@ -8,14 +8,14 @@
 -- and HIPAA/HITECH compliance best practices.
 -- ============================================================
 
--- ── SCHEMA SETUP ──────────────────────────────────────────────────────────────
+--  SCHEMA SETUP
 
 CREATE SCHEMA IF NOT EXISTS clinic_db;
 CREATE SCHEMA IF NOT EXISTS audit_log;
 CREATE SCHEMA IF NOT EXISTS phi_vault;   -- Encrypted PHI separated from clinical data
 SET search_path TO clinic_db;
 
--- ── ROLE-BASED ACCESS CONTROL ─────────────────────────────────────────────────
+--  ROLE-BASED ACCESS CONTROL 
 -- HIPAA Minimum Necessary Rule: each role sees only what they need
 
 -- DO $$ BEGIN
@@ -27,7 +27,7 @@ SET search_path TO clinic_db;
 --   CREATE ROLE auditor;            -- Audit logs only
 -- EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
--- ── PHI VAULT (Separated PII/PHI) ────────────────────────────────────────────
+--   PHI VAULT (Separated PII/PHI)
 
 CREATE TABLE phi_vault.patient_identity (
     patient_uid         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -43,7 +43,7 @@ CREATE TABLE phi_vault.patient_identity (
     access_count        INTEGER DEFAULT 0
 );
 
--- ── CORE CLINICAL TABLES ──────────────────────────────────────────────────────
+--   CORE CLINICAL TABLES
 
 -- Patients (de-identified operational data - separated from PHI)
 CREATE TABLE patients (
